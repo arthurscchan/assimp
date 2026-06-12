@@ -50,6 +50,14 @@ build_fuzzer "assimp_roundtrip_fuzzer" "../fuzz/assimp_roundtrip_fuzzer.cc"
 cp ../fuzz/assimp_fuzzer.dict $OUT/assimp_roundtrip_fuzzer.dict || true
 
 
+# 1c. Post-processing Fuzzer (import any format with no post-processing, then
+#     apply a fuzz-selected subset of the post-processing steps not exercised by
+#     the generic/round-trip fuzzers to reach the geometry/graph transforms).
+build_fuzzer "assimp_postprocess_fuzzer" "../fuzz/assimp_postprocess_fuzzer.cc"
+(cd ../test/models && zip -q -r $OUT/assimp_postprocess_fuzzer_seed_corpus.zip .)
+cp ../fuzz/assimp_fuzzer.dict $OUT/assimp_postprocess_fuzzer.dict || true
+
+
 # 2. OBJ Fuzzer
 build_fuzzer "assimp_fuzzer_obj" "../fuzz/assimp_fuzzer_obj.cc"
 if [ -d "../test/models/OBJ" ]; then
